@@ -1,7 +1,7 @@
 assertj-directories: java
 env:
   global:
-  - CC_TEST_REPORTER_ID=012860db80809891c871d1d95a93dcd4126206a2164734137479a5016f8c336f
+  - CC_TEST_REPORTER_ID=a0dddeda8363cade8544d0079ff5992b9584fd68998b823524f279a0ef8026c8
 before_script:
 - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
   > ./cc-test-reporter
