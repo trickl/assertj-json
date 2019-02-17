@@ -1,8 +1,6 @@
 package com.trickl.assertj.core.internal;
 
-import com.trickl.assertj.util.diff.JsonChangedFieldDelta;
-import com.trickl.assertj.util.diff.JsonMissingFieldDelta;
-import com.trickl.assertj.util.diff.JsonUnexpectedFieldDelta;
+import com.trickl.assertj.util.diff.JsonFieldDelta;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -102,15 +100,15 @@ public class JsonDiff {
 
     List<Delta<String>> diffs = new LinkedList<>();
     for (FieldComparisonFailure missingField : result.getFieldMissing()) {
-      diffs.add(new JsonMissingFieldDelta(missingField));
+      diffs.add(new JsonFieldDelta(missingField, Delta.TYPE.DELETE));
     }
         
     for (FieldComparisonFailure changedField : result.getFieldFailures()) {
-      diffs.add(new JsonChangedFieldDelta(changedField));
+      diffs.add(new JsonFieldDelta(changedField, Delta.TYPE.CHANGE));
     }
 
     for (FieldComparisonFailure unexpectedField : result.getFieldUnexpected()) {
-      diffs.add(new JsonUnexpectedFieldDelta(unexpectedField));
+      diffs.add(new JsonFieldDelta(unexpectedField, Delta.TYPE.INSERT));
     }
 
     return diffs;
