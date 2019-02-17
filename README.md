@@ -17,7 +17,7 @@ See the Junit tests for usage
 
 ### Installing
 
-To download the library into a folder called "palette" run
+To download the library into a folder called "assertj-json" run
 
 ```
 git clone https://github.com/trickl/assertj-json.git
