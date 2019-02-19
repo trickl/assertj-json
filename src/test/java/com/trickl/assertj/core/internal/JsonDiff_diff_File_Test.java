@@ -1,5 +1,6 @@
 package com.trickl.assertj.core.internal;
 
+import static com.trickl.assertj.core.api.Assertions.json;
 import static java.lang.String.format;
 import static java.nio.charset.Charset.defaultCharset;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +50,7 @@ public class JsonDiff_diff_File_Test {
     writer.write(expected, "{\"id\": 3}");
     List<Delta<String>> diffs =
         diff.diff(
-            actual, defaultCharset(), expected, defaultCharset(), new DefaultComparator(NON_EXTENSIBLE));
+            json(actual), json(expected), new DefaultComparator(NON_EXTENSIBLE));
     assertThat(diffs).isEmpty();
   }
 
@@ -59,7 +60,7 @@ public class JsonDiff_diff_File_Test {
     writer.write(expected, "{\"id\": 5}");
     List<Delta<String>> diffs =
         diff.diff(
-            actual, defaultCharset(), expected, defaultCharset(), new DefaultComparator(NON_EXTENSIBLE));
+            json(actual), json(expected), new DefaultComparator(NON_EXTENSIBLE));
     assertThat(diffs).hasSize(1);
     assertThat(diffs.get(0))
         .hasToString(
@@ -72,7 +73,7 @@ public class JsonDiff_diff_File_Test {
     writer.write(expected, "{\"id\": 3, \"id2\": 9}");
     List<Delta<String>> diffs =
         diff.diff(
-            actual, defaultCharset(), expected, defaultCharset(), new DefaultComparator(NON_EXTENSIBLE));
+            json(actual), json(expected), new DefaultComparator(NON_EXTENSIBLE));
     assertThat(diffs).hasSize(1);
     assertThat(diffs.get(0))
         .hasToString(
@@ -85,7 +86,7 @@ public class JsonDiff_diff_File_Test {
     writer.write(expected, "{\"id\": 3}");
     List<Delta<String>> diffs =
         diff.diff(
-            actual, defaultCharset(), expected, defaultCharset(), new DefaultComparator(NON_EXTENSIBLE));
+            json(actual), json(expected), new DefaultComparator(NON_EXTENSIBLE));
     assertThat(diffs).hasSize(1);
     assertThat(diffs.get(0))
         .hasToString(
@@ -99,7 +100,7 @@ public class JsonDiff_diff_File_Test {
     writer.write(expected, "{\"id\": 5, \"id2\": 9}");
     List<Delta<String>> diffs =
         diff.diff(
-            actual, defaultCharset(), expected, defaultCharset(), new DefaultComparator(NON_EXTENSIBLE));
+            json(actual), json(expected), new DefaultComparator(NON_EXTENSIBLE));
     assertThat(diffs).hasSize(2);
     assertThat(diffs.get(0))
         .hasToString(
@@ -117,7 +118,7 @@ public class JsonDiff_diff_File_Test {
     // @format:on
     List<Delta<String>> diffs =
         diff.diff(
-            actual, defaultCharset(), expected, defaultCharset(), new DefaultComparator(NON_EXTENSIBLE));
+            json(actual), json(expected), new DefaultComparator(NON_EXTENSIBLE));
     assertThat(diffs).hasSize(4);
     assertThat(diffs.get(0))
         .hasToString(
