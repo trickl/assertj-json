@@ -9,7 +9,7 @@ An AssertJ fluent assertion wrapper around the Skyscreamer JSON comparison libra
 
 ### Prerequisites
 
-Requires Maven and a Java 6 compiler installed on your system.
+Requires Maven and a Java 8 compiler installed on your system.
 
 ## Example
 
