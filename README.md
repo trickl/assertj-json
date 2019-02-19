@@ -13,10 +13,11 @@ Requires Maven and a Java 6 compiler installed on your system.
 
 ## Example
 
-`assertThat(json("{\"age\":43, \"friend_ids\":[16, 23, 52]}"))
+````assertThat(json("{\"age\":43, \"friend_ids\":[16, 23, 52]}"))
          .allowingExtraUnexpectedFields()
          .allowingAnyArrayOrdering()
-         .isSameJsonAs("{\"friend_ids\":[52, 23, 16]}"); `
+         .isSameJsonAs("{\"friend_ids\":[52, 23, 16]}");
+```
 
 ### Installing
 
