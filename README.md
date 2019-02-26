@@ -9,15 +9,20 @@ An AssertJ fluent assertion wrapper around the Skyscreamer JSON comparison libra
 
 ### Prerequisites
 
-Requires Maven and a Java 6 compiler installed on your system.
+Requires Maven and a Java 8 compiler installed on your system.
 
-## Usage
+## Example
 
-See the Junit tests for usage
+```
+    assertThat(json("{\"age\":43, \"friend_ids\":[16, 23, 52]}"))
+        .allowingExtraUnexpectedFields()
+        .allowingAnyArrayOrdering()
+        .isSameJsonAs("{\"friend_ids\":[52, 23, 16]}");
+```
 
 ### Installing
 
-To download the library into a folder called "palette" run
+To download the library into a folder called "assertj-json" run
 
 ```
 git clone https://github.com/trickl/assertj-json.git
