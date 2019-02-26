@@ -18,7 +18,7 @@ public class Assertions {
   public static JsonAssert assertThat(JsonElement json) {
     return new JsonAssert(new JsonContainer(json.toString()));
   }
-
+  
   public static JsonContainer json(String str) {
     return new JsonContainer(str);
   }

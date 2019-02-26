@@ -4,6 +4,7 @@ import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE;
 
 import com.google.gson.JsonElement;
 import com.trickl.assertj.core.internal.Json;
+import com.trickl.assertj.core.util.diff.WriteOnFailureComparator;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,6 +32,14 @@ public abstract class AbstractJsonAssert<S extends AbstractJsonAssert<S>>
   private boolean extensible = false;
   
   private boolean strictOrder = true;
+  
+  private boolean writeActualOnFailure = false;
+  
+  private Path actualPathOnFailure = null;
+  
+  private boolean writeExpectedOnFailure = false;
+  
+  private Path expectedPathOnFailure = null;
 
   public AbstractJsonAssert(JsonContainer actual, Class<?> selfType) {
     super(actual, selfType);
@@ -63,6 +72,16 @@ public abstract class AbstractJsonAssert<S extends AbstractJsonAssert<S>>
         JSONCompareMode.STRICT
             .withExtensible(extensible)
             .withStrictOrdering(strictOrder));
+    
+    if (writeActualOnFailure || writeExpectedOnFailure) {
+      comparator = new WriteOnFailureComparator(
+          comparator, 
+          writeActualOnFailure,
+          actualPathOnFailure,
+          writeExpectedOnFailure,
+          expectedPathOnFailure);
+    }
+    
     json.assertSameJsonAs(info, actual, expected, comparator);
     return myself;
   }
@@ -76,4 +95,42 @@ public abstract class AbstractJsonAssert<S extends AbstractJsonAssert<S>>
     strictOrder = false;
     return myself;
   }
+  
+  /**
+   * Write the actual output to a temporary file on failure.
+   * @return Updated assertion object
+   */
+  public S writeActualToFileOnFailure() {
+    return writeActualToFileOnFailure(null);
+  }
+  
+  /**
+   * Write the actual output to a file on failure.
+   * @param path The file path, if null, a temporary file is used
+   * @return Updated assertion object
+   */
+  public S writeActualToFileOnFailure(Path path) {
+    writeActualOnFailure = true;
+    actualPathOnFailure = path;
+    return myself;
+  }
+  
+  /**
+   * Write the expected output to a temporary file on failure.
+   * @return Updated assertion object
+   */
+  public S writeExpectedToFileOnFailure() {
+    return writeExpectedToFileOnFailure(null);
+  }
+  
+  /**
+   * Write the expected output to a file on failure.
+   * @param path The file path, if null, a temporary file is used
+   * @return Updated assertion object
+   */
+  public S writeExpectedToFileOnFailure(Path path) {
+    writeExpectedOnFailure = true;
+    expectedPathOnFailure = path;
+    return myself;
+  }   
 }
