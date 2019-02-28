@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -22,6 +24,8 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
     extends AbstractAssert<S, Object> {
 
   private ObjectMapper objectMapper = new ObjectMapper();
+  
+  private Path jsonSchemaResourcePath = null;
   
   private Path serializationResourcePath = null;
   
@@ -57,11 +61,37 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
    */
   public S jsonDeserializationAsExpected() throws IOException {
     if (deserializationResourceUrl == null) {
-      deserializationResourceUrl = classAsResourceUrlConvention(actual.getClass(), ".json"); 
+      deserializationResourceUrl = classAsResourceUrlConvention(
+          actual.getClass(), ".example.json"); 
     }  
       
     assertThat(deserialize(deserializationResourceUrl, actual.getClass()))
         .isEqualTo(actual);
+    return myself;
+  }
+    
+  /**
+   * Check the json schema of the object matches the expected output.
+   * @return A new assertion object
+   * @throws IOException If any file errors occur
+   */
+  public S jsonSchemaAsExpected() throws IOException {
+    if (jsonSchemaResourcePath == null) {
+      jsonSchemaResourcePath = classAsResourcePathConvention(
+          actual.getClass(), ".schema.json");
+    }
+      
+    JsonSchema jsonSchema = jsonSchema(actual);
+    String jsonString = jsonSchema.toString();
+    com.trickl.assertj.core.api.Assertions.assertThat(json(jsonString))
+        .allowingAnyArrayOrdering()
+        .writeActualToFileOnFailure()
+        .isSameJsonAs(json(jsonSchemaResourcePath));
+    return myself;
+  }
+  
+  public S usingJsonSchemaResourcePath(Path path) {
+    jsonSchemaResourcePath = path;
     return myself;
   }
   
@@ -86,6 +116,11 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
 
   private String serialize(Object obj) throws JsonProcessingException {
     return objectMapper.writeValueAsString(obj);
+  }
+  
+  private JsonSchema jsonSchema(Object obj) throws JsonProcessingException {
+    JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(objectMapper);
+    return schemaGen.generateSchema(actual.getClass());
   }
   
   private URL classAsResourceUrlConvention(Class clazz, String extension) {
