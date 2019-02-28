@@ -22,6 +22,10 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
     extends AbstractAssert<S, Object> {
 
   private ObjectMapper objectMapper = new ObjectMapper();
+  
+  private Path serializationResourcePath = null;
+  
+  private URL deserializationResourceUrl = null;
 
   public AbstractObjectAssert(Object actual, Class<?> selfType) {
     super(actual, selfType);
@@ -33,11 +37,16 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
    * @throws IOException If any file errors occur
    */
   public S jsonSerializationAsExpected() throws IOException {
+    if (serializationResourcePath == null) {
+      serializationResourcePath = classAsResourcePathConvention(
+          actual.getClass(), ".json");
+    }
+      
     String jsonString = serialize(actual);
     com.trickl.assertj.core.api.Assertions.assertThat(json(jsonString))
         .allowingAnyArrayOrdering()
         .writeActualToFileOnFailure()
-        .isSameJsonAs(json(classAsResourcePathConvention(actual.getClass(), ".json")));
+        .isSameJsonAs(json(serializationResourcePath));
     return myself;
   }
 
@@ -47,10 +56,22 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
    * @throws IOException If any file errors occur
    */
   public S jsonDeserializationAsExpected() throws IOException {
-    assertThat(
-            deserialize(
-                classAsResourceUrlConvention(actual.getClass(), ".json"), actual.getClass()))
+    if (deserializationResourceUrl == null) {
+      deserializationResourceUrl = classAsResourceUrlConvention(actual.getClass(), ".json"); 
+    }  
+      
+    assertThat(deserialize(deserializationResourceUrl, actual.getClass()))
         .isEqualTo(actual);
+    return myself;
+  }
+  
+  public S usingSerializationResourcePath(Path path) {
+    serializationResourcePath = path;
+    return myself;
+  }
+  
+  public S usingDeserializationResourceUrl(URL url) {
+    deserializationResourceUrl = url;
     return myself;
   }
 
@@ -59,6 +80,14 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
     return myself;
   }
 
+  private <T> T deserialize(URL value, Class<T> clazz) throws JsonProcessingException, IOException {
+    return objectMapper.readValue(value, (Class<T>) clazz);
+  }
+
+  private String serialize(Object obj) throws JsonProcessingException {
+    return objectMapper.writeValueAsString(obj);
+  }
+  
   private URL classAsResourceUrlConvention(Class clazz, String extension) {
     String resourceName = clazz.getSimpleName() + extension;
     return clazz.getResource(resourceName);
@@ -72,13 +101,5 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
         "src/test/resources/",
         clazz.getPackage().getName().replaceAll("\\.", "/"),
         clazz.getSimpleName() + extension);
-  }
-
-  private <T> T deserialize(URL value, Class<T> clazz) throws JsonProcessingException, IOException {
-    return objectMapper.readValue(value, (Class<T>) clazz);
-  }
-
-  private String serialize(Object obj) throws JsonProcessingException {
-    return objectMapper.writeValueAsString(obj);
   }
 }
