@@ -1,7 +1,7 @@
 package com.trickl.assertj.core.api.json;
 
-import static com.trickl.assertj.core.api.Assertions.assertThat;
-import static com.trickl.assertj.core.api.Assertions.json;
+import static com.trickl.assertj.core.api.JsonAssertions.assertThat;
+import static com.trickl.assertj.core.api.JsonAssertions.json;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 

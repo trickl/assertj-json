@@ -1,6 +1,6 @@
 package com.trickl.assertj.core.internal;
 
-import static com.trickl.assertj.core.api.Assertions.json;
+import static com.trickl.assertj.core.api.JsonAssertions.json;
 import static java.lang.String.format;
 import static java.nio.charset.Charset.defaultCharset;
 import static org.assertj.core.api.Assertions.assertThat;

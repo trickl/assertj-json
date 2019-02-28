@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /** The entry point for all JSON assertions. */
-public class Assertions {
+public class JsonAssertions {
 
   public static JsonAssert assertThat(JsonContainer json) {
     return new JsonAssert(json);
@@ -28,7 +28,7 @@ public class Assertions {
   }
 
   /** Creates a new <code>{@link Assertions}</code>. */
-  protected Assertions() {
+  protected JsonAssertions() {
     // empty
   }
 }
