@@ -43,7 +43,7 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
   public S jsonSerializationAsExpected() throws IOException {
     if (serializationResourcePath == null) {
       serializationResourcePath = classAsResourcePathConvention(
-          actual.getClass(), ".json");
+          actual.getClass(), ".example.json");
     }
       
     String jsonString = serialize(actual);
