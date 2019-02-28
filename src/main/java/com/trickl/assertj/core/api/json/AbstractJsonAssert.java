@@ -2,7 +2,6 @@ package com.trickl.assertj.core.api.json;
 
 import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE;
 
-import com.google.gson.JsonElement;
 import com.trickl.assertj.core.internal.Json;
 import com.trickl.assertj.core.util.diff.WriteOnFailureComparator;
 import java.io.File;
@@ -50,10 +49,6 @@ public abstract class AbstractJsonAssert<S extends AbstractJsonAssert<S>>
   public S isSameJsonAs(Path expected) throws IOException {
     String contents = new String(Files.readAllBytes(expected));
     return isSameJsonAs(contents);
-  }
-
-  public S isSameJsonAs(JsonElement expected) {
-    return isSameJsonAs(expected.toString());
   }
 
   public S isSameJsonAs(String expected) {
