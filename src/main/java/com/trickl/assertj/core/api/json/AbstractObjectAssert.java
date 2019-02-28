@@ -82,7 +82,7 @@ public abstract class AbstractObjectAssert<S extends AbstractObjectAssert<S>>
     }
       
     JsonSchema jsonSchema = jsonSchema(actual);
-    String jsonString = jsonSchema.toString();
+    String jsonString = objectMapper.writeValueAsString(jsonSchema);
     com.trickl.assertj.core.api.Assertions.assertThat(json(jsonString))
         .allowingAnyArrayOrdering()
         .writeActualToFileOnFailure()
