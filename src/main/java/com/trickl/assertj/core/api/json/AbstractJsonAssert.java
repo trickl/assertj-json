@@ -26,8 +26,6 @@ public abstract class AbstractJsonAssert<S extends AbstractJsonAssert<S>>
     extends AbstractAssert<S, JsonContainer> {
 
   @VisibleForTesting Json json = Json.instance();
-
-  @VisibleForTesting JSONComparator defaultComparator = new DefaultComparator(NON_EXTENSIBLE);
   
   private boolean extensible = false;
   
