@@ -68,6 +68,7 @@ public abstract class AbstractJsonAssert<S extends AbstractJsonAssert<S>>
     
     if (writeActualOnFailure || writeExpectedOnFailure) {
       comparator = new WriteOnFailureComparator(
+          info,
           comparator, 
           writeActualOnFailure,
           actualPathOnFailure,

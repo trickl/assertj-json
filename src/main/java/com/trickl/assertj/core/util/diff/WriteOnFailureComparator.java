@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.assertj.core.api.WritableAssertionInfo;
 import org.assertj.core.util.Files;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,7 @@ import org.skyscreamer.jsonassert.comparator.JSONComparator;
 @RequiredArgsConstructor
 @Log
 public class WriteOnFailureComparator implements JSONComparator {
+  private final WritableAssertionInfo assertionInfo;
   private final JSONComparator comparator;
   private final boolean writeActual;
   private final Path actualOutputPath;
@@ -69,16 +71,18 @@ public class WriteOnFailureComparator implements JSONComparator {
     if (result.passed()) {
       return;
     }
-
+    
     if (writeActual) {
-      write(actualOutputPath, actual);
+      File file = write(actualOutputPath, actual);
+      assertionInfo.description("Actual output written to %s", file.getAbsolutePath());
     }
     if (writeExpected) {
-      write(expectedOutputPath, expected);
+      File file = write(expectedOutputPath, expected);
+      assertionInfo.description("Expected output written to %s", file.getAbsolutePath());
     }
   }
 
-  private void write(Path path, String output) {
+  private File write(Path path, String output) {
     File outputFile;
     if (path == null) {
       outputFile = Files.newTemporaryFile();
@@ -86,11 +90,13 @@ public class WriteOnFailureComparator implements JSONComparator {
       outputFile = path.toFile();
       outputFile.mkdirs();
     }
-
+    
     try (Writer writer = new FileWriter(outputFile)) {  
       writer.write(output);
     } catch (IOException ex) {
       log.log(Level.WARNING, "Unable to write to file {0}", outputFile.getAbsolutePath());
     }
+    
+    return outputFile;
   }
 }
