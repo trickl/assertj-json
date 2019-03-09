@@ -15,7 +15,7 @@ To install from Maven Central:
 
 ```xml
 <dependency>
-	<groupId>com.github.trickl/groupId>
+	<groupId>com.github.trickl</groupId>
 	<artifactId>assertj-json</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 </dependency>
