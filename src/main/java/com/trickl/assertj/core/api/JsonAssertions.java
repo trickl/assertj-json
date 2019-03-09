@@ -27,7 +27,7 @@ public class JsonAssertions {
     return json(file.toPath());
   }
 
-  /** Creates a new <code>{@link Assertions}</code>. */
+  /** Creates a new <code>{@link JsonAssertions}</code>. */
   protected JsonAssertions() {
     // empty
   }
