@@ -1,4 +1,13 @@
-assertj-directories: java
+language: java
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk7
+install:
+  - mvn --settings .travis/settings.xml install -DskipTests=true -Dgpg.skip -Dmaven.javadoc.skip=true -B -V
+before_install:
+  - if [ ! -z "$GPG_SECRET_KEYS" ]; then echo $GPG_SECRET_KEYS | base64 --decode | $GPG_EXECUTABLE --import; fi
+  - if [ ! -z "$GPG_OWNERTRUST" ]; then echo $GPG_OWNERTRUST | base64 --decode | $GPG_EXECUTABLE --import-ownertrust; fi
 env:
   global:
   - CC_TEST_REPORTER_ID=a0dddeda8363cade8544d0079ff5992b9584fd68998b823524f279a0ef8026c8
@@ -17,9 +26,26 @@ before_deploy:
 - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep
   -v '\[')
 deploy:
-  provider: releases
-  api_key:
-    secure: IN+w9/eDXynx3EM4TgRj4IwMC0+s5Di+IBEG9no51hUiR2avPc72k+qHmxJWiN3of9CX0mCdwgm+KhD2uKSZLnw+HadWb2ZtSMADfzoffQQb9eLkmDsVQbgQ1C4FWxLKfGl3DfMiw2cDr7NsD75sLU07EYC3SMWPuGYCDrf5NVeYPhb8StCA61noKwBQh3W1NMy20XJYE+fuaV9e3Ehl20wtpVVF5DweQVsAcXMJ8uS0ndtUHZs3BNLULSNRa7Pm46trD/RoI1foRGTmXrBBtC/5RPoI85TUhgeYJp7MmoCLfLDKt6IvqnmL/UvgTL3Hr8v/0vvgVtR/I7RZ4B1vvyPsxRkMWkqqm2hEpmGkbYxO2UEBo3yTAob4aocG0YYwaHF/IHubV8cya+lRWbTvaoFoIFNUZgFlqyt0X9JBFQr7aaEI6LlhiSwsQpz7Lok4ofIQRKnAOtbyoDpB7oLZwYFS58ZqYar6yk7CuKnkoZSB9jqPzL+xxU1Ccf07T7E5YbDKvuJv/KFwD0xLALkWadeTxMLPVjoE4axzXiBXd/gl4QebpWT3eIBZAF9HrX2SkrKhquECOSaBTJNnXqM5B/jc6CkQwAcjycIZuPNoyk3r00OPWq5Li4xKkxKjATtTmwBf3XeTHqXwpuCeEBsbOpUkxhzv2GMK7R8nZtOAItU=
-  file: ".travis.yml"
-  on:
-    repo: trickl/assertj-json
+  -
+    provider: script
+    script: .travis/deploy.sh
+    skip_cleanup: true
+    on:
+      repo: trickl/assertj-json
+      branch: master
+      jdk: oraclejdk8
+  -
+    provider: script
+    script: .travis/deploy.sh
+    skip_cleanup: true
+    on:
+      repo: trickl/assertj-json
+      tags: true
+      jdk: oraclejdk8
+  -
+    provider: releases
+    api_key:
+      secure: IN+w9/eDXynx3EM4TgRj4IwMC0+s5Di+IBEG9no51hUiR2avPc72k+qHmxJWiN3of9CX0mCdwgm+KhD2uKSZLnw+HadWb2ZtSMADfzoffQQb9eLkmDsVQbgQ1C4FWxLKfGl3DfMiw2cDr7NsD75sLU07EYC3SMWPuGYCDrf5NVeYPhb8StCA61noKwBQh3W1NMy20XJYE+fuaV9e3Ehl20wtpVVF5DweQVsAcXMJ8uS0ndtUHZs3BNLULSNRa7Pm46trD/RoI1foRGTmXrBBtC/5RPoI85TUhgeYJp7MmoCLfLDKt6IvqnmL/UvgTL3Hr8v/0vvgVtR/I7RZ4B1vvyPsxRkMWkqqm2hEpmGkbYxO2UEBo3yTAob4aocG0YYwaHF/IHubV8cya+lRWbTvaoFoIFNUZgFlqyt0X9JBFQr7aaEI6LlhiSwsQpz7Lok4ofIQRKnAOtbyoDpB7oLZwYFS58ZqYar6yk7CuKnkoZSB9jqPzL+xxU1Ccf07T7E5YbDKvuJv/KFwD0xLALkWadeTxMLPVjoE4axzXiBXd/gl4QebpWT3eIBZAF9HrX2SkrKhquECOSaBTJNnXqM5B/jc6CkQwAcjycIZuPNoyk3r00OPWq5Li4xKkxKjATtTmwBf3XeTHqXwpuCeEBsbOpUkxhzv2GMK7R8nZtOAItU=
+    file: ".travis.yml"
+    on:
+      repo: trickl/assertj-json
