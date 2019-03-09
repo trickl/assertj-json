@@ -13,6 +13,7 @@ before_script:
   > ./cc-test-reporter
 - chmod +x ./cc-test-reporter
 - "./cc-test-reporter before-build"
+- ".travis/before-script.sh"
 script:
 - mvn test
 after_script:
@@ -22,7 +23,6 @@ before_deploy:
 - mvn help:evaluate -N -Dexpression=project.version|grep -v '\['
 - export project_version=$(mvn help:evaluate -N -Dexpression=project.version|grep
   -v '\[')
-- ".travis/before-deploy.sh"
 deploy:
 - provider: script
   script: ".travis/deploy.sh"
