@@ -1,4 +1,4 @@
-if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
+if [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
   if [ ! -z "$TRAVIS_TAG" ]
   then
       echo "on a tag -> set pom.xml <version> to $TRAVIS_TAG"
