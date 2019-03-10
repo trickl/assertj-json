@@ -28,13 +28,8 @@ deploy:
   script: ".travis/deploy.sh"
   skip_cleanup: true
   on:
-    branch: master
-- provider: script
-  script: ".travis/deploy.sh"
-  skip_cleanup: true
-  on:
     tags: true
-    condition: $TRAVIS_BRANCH ~= ^[\d]+\.[\d]+(\.[\d]+)?$
+    condition: $TRAVIS_BRANCH ~= ^[\d]+\.[\d]+(\.[\d]+)?$ OR $TRAVIS_BRANCH ~= ^master$
     all_branches: true
 - provider: releases
   api_key:
