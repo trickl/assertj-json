@@ -28,13 +28,15 @@ deploy:
   script: ".travis/deploy.sh"
   skip_cleanup: true
   on:
+    repo: trickl/assertj-json
     tags: true
-    condition: $TRAVIS_BRANCH =~ ^\d+\.\d+\.\d+$
+    condition: NOT $TRAVIS_BRANCH =~ ^untagged
     all_branches: true
 - provider: script
   script: ".travis/deploy.sh"
   skip_cleanup: true
   on:
+    repo: trickl/assertj-json
     branch: master
     tags: false
 - provider: releases
@@ -43,3 +45,6 @@ deploy:
   file: ".travis.yml"
   on:
     repo: trickl/assertj-json
+    tags: true
+    condition: NOT $TRAVIS_BRANCH =~ ^untagged
+    all_branches: true
