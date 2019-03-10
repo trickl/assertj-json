@@ -30,7 +30,7 @@ deploy:
   on:
     repo: trickl/assertj-json
     tags: true
-    condition: NOT ("$TRAVIS_BRANCH" =~ ^untagged)
+    condition: "$TRAVIS_TAG" =~ ^[0-999].[0-999].[0-999]$
     all_branches: true
 - provider: script
   script: ".travis/deploy.sh"
@@ -46,5 +46,5 @@ deploy:
   on:
     repo: trickl/assertj-json
     tags: true
-    condition: NOT ("$TRAVIS_BRANCH" =~ ^untagged)
+    condition: "$TRAVIS_TAG" =~ ^[0-999].[0-999].[0-999]$
     all_branches: true
