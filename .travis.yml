@@ -30,7 +30,7 @@ deploy:
   on:
     repo: trickl/assertj-json
     tags: true
-    condition: "$TRAVIS_TAG" =~ ^[0-999].[0-999].[0-999]$
+    condition: $TRAVIS_TAG =~ ^[0-9+].[0-9+].[0-9+]$
     all_branches: true
 - provider: script
   script: ".travis/deploy.sh"
@@ -46,5 +46,5 @@ deploy:
   on:
     repo: trickl/assertj-json
     tags: true
-    condition: "$TRAVIS_TAG" =~ ^[0-999].[0-999].[0-999]$
+    condition: $TRAVIS_TAG =~ ^[0-9+].[0-9+].[0-9+]$
     all_branches: true
