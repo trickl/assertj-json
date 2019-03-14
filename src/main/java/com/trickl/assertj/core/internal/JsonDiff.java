@@ -2,6 +2,7 @@ package com.trickl.assertj.core.internal;
 
 import com.trickl.assertj.core.api.json.JsonContainer;
 import com.trickl.assertj.util.diff.JsonFieldDelta;
+import com.trickl.assertj.util.diff.JsonMessageDelta;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -56,6 +57,10 @@ public class JsonDiff {
 
     for (FieldComparisonFailure unexpectedField : result.getFieldUnexpected()) {
       diffs.add(new JsonFieldDelta(unexpectedField, Delta.TYPE.INSERT));
+    }
+    
+    if (diffs.isEmpty()) {
+      diffs.add(new JsonMessageDelta(result.getMessage()));      
     }
 
     return diffs;

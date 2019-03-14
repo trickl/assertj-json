@@ -68,4 +68,22 @@ public class JsonAssert_isSameJsonAs_Test extends JsonAssertBaseTest {
             "\"friend_ids[0]\" - Expected: '16' got: '52'\n" +
             "\"friend_ids[2]\" - Expected: '52' got: '16'");
   }
+  
+  @Test
+  public void should_assert_if_nested_array_different() {    
+     assertThatThrownBy(() -> assertThat(json("{\"nested\": {\"friend_ids\":[1, 2, 3]}}"))
+         .isSameJsonAs("{\"nested\": {\"friend_ids\":[1]}}"))
+        .isInstanceOf(AssertionError.class)
+        .hasMessage("\nInputStream does not have same content as String:\n" +
+            "\n" +
+            "nested.friend_ids[]: Expected 1 values but got 3");
+  }
+  
+  @Test
+  public void should_assert_if_root_string_different() {    
+     assertThatThrownBy(() -> assertThat(json("\"test1\""))
+         .isSameJsonAs("\"test2\""))
+        .isInstanceOf(AssertionError.class)
+        .hasMessage("\nInputStream does not have same content as String:\n\n");
+  }
 }
