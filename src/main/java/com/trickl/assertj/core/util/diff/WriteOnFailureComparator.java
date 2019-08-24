@@ -74,7 +74,9 @@ public class WriteOnFailureComparator implements JSONComparator {
     
     if (writeActual) {
       File file = write(actualOutputPath, actual);
-      assertionInfo.description("Actual output written to %s", file.getAbsolutePath());
+      assertionInfo.description("Expected output %s, Actual output written to %s",
+          expectedOutputPath, 
+          file.getAbsolutePath());
     }
     if (writeExpected) {
       File file = write(expectedOutputPath, expected);
