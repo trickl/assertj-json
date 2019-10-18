@@ -1,14 +1,15 @@
 package com.trickl.assertj.core.internal;
 
-import static org.assertj.core.error.ShouldHaveSameContent.shouldHaveSameContent;
-
 import com.trickl.assertj.core.api.json.JsonContainer;
+import com.trickl.assertj.core.util.diff.PostComparisonAction;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import org.assertj.core.api.AssertionInfo;
+import org.assertj.core.error.ShouldHaveSameContent;
 import org.assertj.core.internal.Failures;
 import org.assertj.core.internal.Objects;
 import org.assertj.core.util.VisibleForTesting;
@@ -42,6 +43,7 @@ public class Json {
    * @param actual the "actual" JSON.
    * @param expected the "expected" JSON.
    * @param comparator how to compare JSON
+   * @param postComparisonAction additional actions to perform after comparison
    * @throws NullPointerException if {@code expected} is {@code null}.
    * @throws IllegalArgumentException if {@code expected} is not an existing directory.
    * @throws AssertionError if {@code actual} is {@code null}.
@@ -50,7 +52,11 @@ public class Json {
    * @throws AssertionError if the given directories do not have same content.
    */
   public void assertSameJsonAs(
-      AssertionInfo info, JsonContainer actual, JsonContainer expected, JSONComparator comparator) {
+      AssertionInfo info,
+      JsonContainer actual,
+      JsonContainer expected,
+      JSONComparator comparator,
+      PostComparisonAction postComparisonAction) {
     assertNotNull(info, actual);
     assertNotNull(info, actual);
     try {
@@ -58,9 +64,12 @@ public class Json {
       if (diffs.isEmpty()) {
         return;
       }
+      if (postComparisonAction != null) {
+        postComparisonAction.apply(diffs, actual.getJson(), expected.getJson());
+      }
       throw failures.failure(
           info,
-          shouldHaveSameContent(
+          ShouldHaveSameContent.shouldHaveSameContent(
               new ByteArrayInputStream(actual.getJson().getBytes()), expected.getJson(), diffs));
     } catch (IOException e) {
       throw new UncheckedIOException("Unable to compare JSON", e);

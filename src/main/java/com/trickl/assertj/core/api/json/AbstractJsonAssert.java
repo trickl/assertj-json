@@ -3,7 +3,9 @@ package com.trickl.assertj.core.api.json;
 import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE;
 
 import com.trickl.assertj.core.internal.Json;
-import com.trickl.assertj.core.util.diff.WriteOnFailureComparator;
+import com.trickl.assertj.core.util.diff.PostComparisonAction;
+import com.trickl.assertj.core.util.diff.WriteOnFailureAction;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -66,17 +68,17 @@ public abstract class AbstractJsonAssert<S extends AbstractJsonAssert<S>>
             .withExtensible(extensible)
             .withStrictOrdering(strictOrder));
     
+    PostComparisonAction postComparisonAction = null;
     if (writeActualOnFailure || writeExpectedOnFailure) {
-      comparator = new WriteOnFailureComparator(
+      postComparisonAction = new WriteOnFailureAction(
           info,
-          comparator, 
           writeActualOnFailure,
           actualPathOnFailure,
           writeExpectedOnFailure,
           expectedPathOnFailure);
     }
     
-    json.assertSameJsonAs(info, actual, expected, comparator);
+    json.assertSameJsonAs(info, actual, expected, comparator, postComparisonAction);
     return myself;
   }
 

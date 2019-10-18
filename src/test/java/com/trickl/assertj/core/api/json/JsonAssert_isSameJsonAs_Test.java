@@ -3,9 +3,13 @@ package com.trickl.assertj.core.api.json;
 import static com.trickl.assertj.core.api.JsonAssertions.assertThat;
 import static com.trickl.assertj.core.api.JsonAssertions.json;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.AdditionalMatchers.or;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
+
+import com.trickl.assertj.core.util.diff.PostComparisonAction;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,7 +39,8 @@ public class JsonAssert_isSameJsonAs_Test extends JsonAssertBaseTest {
     verify(json).assertSameJsonAs(eq(getInfo(assertions)),
         eq(getActual(assertions)),
         eq(expected),
-        any(JSONComparator.class));
+        any(JSONComparator.class),
+        or(any(PostComparisonAction.class), isNull()));
   }
       
   @Test
