@@ -24,7 +24,12 @@ public class JsonRootDelta<T> extends Delta<T> {
 
   @Getter private final TYPE type = TYPE.CHANGE;
 
-  /** Create a delta for a JSON document. */
+  /**
+  * Create a delta for a JSON document.
+  * @param expected the expected element
+  * @param actual the actual element
+  * @param message the optional descriptive message
+  */
   public JsonRootDelta(String expected, String actual, String message) {
     super(new Chunk(0, Collections.EMPTY_LIST), new Chunk(0, Collections.EMPTY_LIST));
     this.expected = expected;
