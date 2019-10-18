@@ -25,14 +25,15 @@ public class WriteOnFailureComparator implements JSONComparator {
   private final Path actualOutputPath;
   private final boolean writeExpected;
   private final Path expectedOutputPath;
-  private final int indentation = 2;
+  
+  private static final int INDENTATION = 2;
 
   @Override
   public JSONCompareResult compareJSON(JSONObject expected, JSONObject actual)
       throws JSONException {
     JSONCompareResult result = comparator.compareJSON(expected, actual);
 
-    writeOnFailure(result, expected.toString(), actual.toString(indentation));
+    writeOnFailure(result, expected.toString(), actual.toString(INDENTATION));
 
     return result;
   }
@@ -40,7 +41,7 @@ public class WriteOnFailureComparator implements JSONComparator {
   @Override
   public JSONCompareResult compareJSON(JSONArray expected, JSONArray actual) throws JSONException {
     JSONCompareResult result = comparator.compareJSON(expected, actual);
-    writeOnFailure(result, expected.toString(), actual.toString(indentation));
+    writeOnFailure(result, expected.toString(), actual.toString(INDENTATION));
     return result;
   }
 
@@ -49,7 +50,7 @@ public class WriteOnFailureComparator implements JSONComparator {
       String str, JSONObject expected, JSONObject actual, JSONCompareResult result)
       throws JSONException {
     comparator.compareJSON(str, expected, actual, result);
-    writeOnFailure(result, expected.toString(), actual.toString(indentation));
+    writeOnFailure(result, expected.toString(), actual.toString(INDENTATION));
   }
 
   @Override
@@ -64,7 +65,7 @@ public class WriteOnFailureComparator implements JSONComparator {
       String str, JSONArray expected, JSONArray actual, JSONCompareResult result)
       throws JSONException {
     comparator.compareJSONArray(str, expected, actual, result);
-    writeOnFailure(result, expected.toString(indentation), actual.toString(indentation));
+    writeOnFailure(result, expected.toString(INDENTATION), actual.toString(INDENTATION));
   }
 
   private void writeOnFailure(JSONCompareResult result, String expected, String actual) {

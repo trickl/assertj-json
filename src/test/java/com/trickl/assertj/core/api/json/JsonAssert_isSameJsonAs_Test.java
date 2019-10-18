@@ -3,12 +3,12 @@ package com.trickl.assertj.core.api.json;
 import static com.trickl.assertj.core.api.JsonAssertions.assertThat;
 import static com.trickl.assertj.core.api.JsonAssertions.json;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import org.skyscreamer.jsonassert.comparator.JSONComparator;
 
 /**
@@ -84,6 +84,7 @@ public class JsonAssert_isSameJsonAs_Test extends JsonAssertBaseTest {
      assertThatThrownBy(() -> assertThat(json("\"test1\""))
          .isSameJsonAs("\"test2\""))
         .isInstanceOf(AssertionError.class)
-        .hasMessage("\nInputStream does not have same content as String:\n\n");
+        .hasMessage("\nInputStream does not have same content as String:" + 
+        "\n\nExpected: '\"test2\"' got: '\"test1\"'");
   }
 }

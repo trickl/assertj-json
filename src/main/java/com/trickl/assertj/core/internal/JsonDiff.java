@@ -2,7 +2,7 @@ package com.trickl.assertj.core.internal;
 
 import com.trickl.assertj.core.api.json.JsonContainer;
 import com.trickl.assertj.util.diff.JsonFieldDelta;
-import com.trickl.assertj.util.diff.JsonMessageDelta;
+import com.trickl.assertj.util.diff.JsonRootDelta;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -33,34 +33,38 @@ public class JsonDiff {
   public List<Delta<String>> diff(
       JsonContainer actual, JsonContainer expected, JSONComparator comparator) throws IOException {
     try {
-      JSONCompareResult result =
-          JSONCompare.compareJSON(expected.getJson(), actual.getJson(), comparator);
-      return asDiff(result);
+      String expectedStr = expected.getJson();
+      String actualStr = actual.getJson();
+      JSONCompareResult result = JSONCompare.compareJSON(expectedStr, actualStr, comparator);
+      return asDiff(result, expectedStr, actualStr);
     } catch (JSONException ex) {
       throw new IOException(ex);
     }
   }
 
-  private List<Delta<String>> asDiff(JSONCompareResult result) {
+  private List<Delta<String>> asDiff(JSONCompareResult result, String expectedStr, String actualStr)
+      throws JSONException {
     if (result.passed()) {
-      return Collections.EMPTY_LIST;
+      return Collections.emptyList();
     }
 
     List<Delta<String>> diffs = new LinkedList<>();
     for (FieldComparisonFailure missingField : result.getFieldMissing()) {
-      diffs.add(new JsonFieldDelta(missingField, Delta.TYPE.DELETE));
+      diffs.add(new JsonFieldDelta<>(missingField, Delta.TYPE.DELETE));
     }
 
     for (FieldComparisonFailure changedField : result.getFieldFailures()) {
-      diffs.add(new JsonFieldDelta(changedField, Delta.TYPE.CHANGE));
+      diffs.add(new JsonFieldDelta<>(changedField, Delta.TYPE.CHANGE));
     }
 
     for (FieldComparisonFailure unexpectedField : result.getFieldUnexpected()) {
-      diffs.add(new JsonFieldDelta(unexpectedField, Delta.TYPE.INSERT));
+      diffs.add(new JsonFieldDelta<>(unexpectedField, Delta.TYPE.INSERT));
     }
-    
+
     if (diffs.isEmpty()) {
-      diffs.add(new JsonMessageDelta(result.getMessage()));      
+      String expectedNoFormat = expectedStr.replace("\n", "").replace("\r", "");
+      String actualNoFormat = actualStr.replace("\n", "").replace("\r", "");
+      diffs.add(new JsonRootDelta<>(expectedNoFormat, actualNoFormat, result.getMessage()));
     }
 
     return diffs;

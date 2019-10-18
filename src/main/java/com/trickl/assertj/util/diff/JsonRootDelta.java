@@ -1,5 +1,6 @@
 package com.trickl.assertj.util.diff;
 
+import com.trickl.assertj.core.presentation.FieldComparisonFailureFormatter;
 import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
@@ -13,20 +14,23 @@ import org.assertj.core.util.diff.Delta;
  *
  * @param <T> The type of the compared elements in the 'lines'.
  */
-public class JsonMessageDelta<T> extends Delta<T> {
+public class JsonRootDelta<T> extends Delta<T> {
+
+  @Getter private final String expected;
+
+  @Getter private final String actual;
 
   @Getter private final String message;
-  
+
   @Getter private final TYPE type = TYPE.CHANGE;
-  
-  /**
-   * Create a delta for a JSON document.
-   * @param message details of the difference
-   */
-  public JsonMessageDelta(String message) {
+
+  /** Create a delta for a JSON document. */
+  public JsonRootDelta(String expected, String actual, String message) {
     super(new Chunk(0, Collections.EMPTY_LIST), new Chunk(0, Collections.EMPTY_LIST));
+    this.expected = expected;
+    this.actual = actual;
     this.message = message;
-  }  
+  }
 
   @Override
   public void applyTo(List<T> target) throws IllegalStateException {}
@@ -36,6 +40,10 @@ public class JsonMessageDelta<T> extends Delta<T> {
 
   @Override
   public String toString() {
-    return message;
+    FieldComparisonFailureFormatter formatter = new FieldComparisonFailureFormatter();
+    if (message != null && message.length() > 0) {
+      return message;
+    }
+    return formatter.formatRootFailureMessage(expected, actual);
   }
 }

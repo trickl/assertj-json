@@ -10,7 +10,7 @@ public class FieldComparisonFailureFormatter {
     return formatUnexpected(failure.getActual());
   }
     
-  private String formatUnexpected(Object actual) {
+  protected String formatUnexpected(Object actual) {
     return "Unexpected: " + describe(actual);
   }
    
@@ -18,17 +18,31 @@ public class FieldComparisonFailureFormatter {
     return formatMissing(failure.getExpected());
   }
      
-  private String formatMissing(Object expected) {
+  protected String formatMissing(Object expected) {
     return "Expected: " + describe(expected) + " but none found";
   }
 
+  public String formatRootFailureMessage(Object expected, Object actual) {
+    return formatFailureMessage(null, expected, actual);
+  }
+
   public String formatFailureMessage(FieldComparisonFailure failure) {
-    return FieldComparisonFailureFormatter.this.formatFailureMessage(
+    return formatFailureMessage(
         failure.getField(), failure.getActual(), failure.getExpected());
   }
 
-  private String formatFailureMessage(String field, Object expected, Object actual) {
-    return quote(field) + " - Expected: " + describe(expected) + " got: " + describe(actual);
+  protected String formatFailureMessage(String field, Object expected, Object actual) {
+    StringBuilder messageBuilder = new StringBuilder();
+    if (field != null && field.length() > 0) {
+      messageBuilder.append(quote(field));
+      messageBuilder.append(" - ");
+    }
+    messageBuilder.append("Expected: ");
+    messageBuilder.append(describe(expected));
+    messageBuilder.append(" ");
+    messageBuilder.append("got: ");
+    messageBuilder.append(describe(actual));
+    return messageBuilder.toString();
   }
   
   private static String quote(String value) {

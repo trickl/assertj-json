@@ -2,19 +2,19 @@ package com.trickl.assertj.core.internal;
 
 import static com.trickl.assertj.core.api.JsonAssertions.json;
 import static java.lang.String.format;
-import static java.nio.charset.Charset.defaultCharset;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import org.assertj.core.util.Files;
 import org.assertj.core.util.TextFileWriter;
 import org.assertj.core.util.diff.Delta;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE;
 import org.skyscreamer.jsonassert.comparator.DefaultComparator;
 
 /**
@@ -55,6 +55,16 @@ public class JsonDiff_diff_File_Test {
   }
 
   @Test
+  public void should_return_empty_diff_on_identical_primitives() throws IOException {
+    writer.write(actual, "\"original\"");
+    writer.write(expected, "\"original\"");
+    List<Delta<String>> diffs =
+        diff.diff(
+            json(actual), json(expected), new DefaultComparator(NON_EXTENSIBLE));
+    assertThat(diffs).isEmpty();
+  }
+
+  @Test
   public void should_return_diffs_if_files_have_different_fields() throws IOException {
     writer.write(actual, "{\"id\": 3}");
     writer.write(expected, "{\"id\": 5}");
@@ -65,6 +75,20 @@ public class JsonDiff_diff_File_Test {
     assertThat(diffs.get(0))
         .hasToString(
             format("\"id\" - Expected: '3' got: '5'"));
+  }
+
+
+  @Test
+  public void should_return_diffs_on_different_primitives() throws IOException {
+    writer.write(actual, "\"actual\"");
+    writer.write(expected, "\"expected\"");
+    List<Delta<String>> diffs =
+        diff.diff(
+            json(actual), json(expected), new DefaultComparator(NON_EXTENSIBLE));
+    assertThat(diffs).hasSize(1);
+    assertThat(diffs.get(0))
+        .hasToString(
+            format("Expected: '\"expected\"' got: '\"actual\"'"));
   }
 
   @Test
