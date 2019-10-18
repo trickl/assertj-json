@@ -2,6 +2,7 @@ package com.trickl.assertj.core.presentation;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 import org.skyscreamer.jsonassert.FieldComparisonFailure;
 
 public class FieldComparisonFailureFormatter {
@@ -54,6 +55,8 @@ public class FieldComparisonFailureFormatter {
       return "a JSON array";
     } else if (value instanceof JSONObject) {
       return "a JSON object";
+    } else if (value instanceof JSONString) {
+      return ((JSONString) value).toJSONString();
     } else {
       return "'" + value.toString() + "'";
     }
