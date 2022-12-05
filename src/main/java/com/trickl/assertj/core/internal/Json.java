@@ -2,7 +2,6 @@ package com.trickl.assertj.core.internal;
 
 import com.trickl.assertj.core.api.json.JsonContainer;
 import com.trickl.assertj.core.util.diff.PostComparisonAction;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +33,8 @@ public class Json {
   @VisibleForTesting Failures failures = Failures.instance();
 
   @VisibleForTesting
-  Json() {}
+  Json() {
+  }
 
   /**
    * Asserts that the given JSON structures have same content.

@@ -25,11 +25,12 @@ public class JsonRootDelta<T> extends Delta<T> {
   @Getter private final TYPE type = TYPE.CHANGE;
 
   /**
-  * Create a delta for a JSON document.
-  * @param expected the expected element
-  * @param actual the actual element
-  * @param message the optional descriptive message
-  */
+   * Create a delta for a JSON document.
+   *
+   * @param expected the expected element
+   * @param actual the actual element
+   * @param message the optional descriptive message
+   */
   public JsonRootDelta(String expected, String actual, String message) {
     super(new Chunk(0, Collections.EMPTY_LIST), new Chunk(0, Collections.EMPTY_LIST));
     this.expected = expected;
@@ -38,10 +39,12 @@ public class JsonRootDelta<T> extends Delta<T> {
   }
 
   @Override
-  public void applyTo(List<T> target) throws IllegalStateException {}
+  public void applyTo(List<T> target) throws IllegalStateException {
+  }
 
   @Override
-  public void verify(List<T> target) throws IllegalStateException {}
+  public void verify(List<T> target) throws IllegalStateException {
+  }
 
   @Override
   public String toString() {

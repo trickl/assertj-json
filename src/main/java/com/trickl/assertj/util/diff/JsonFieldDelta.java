@@ -33,10 +33,12 @@ public class JsonFieldDelta<T> extends Delta<T> {
   }
 
   @Override
-  public void applyTo(List<T> target) throws IllegalStateException {}
+  public void applyTo(List<T> target) throws IllegalStateException {
+  }
 
   @Override
-  public void verify(List<T> target) throws IllegalStateException {}
+  public void verify(List<T> target) throws IllegalStateException {
+  }
 
   @Override
   public String toString() {

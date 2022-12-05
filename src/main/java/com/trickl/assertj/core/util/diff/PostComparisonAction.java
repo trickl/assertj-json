@@ -1,7 +1,6 @@
 package com.trickl.assertj.core.util.diff;
 
 import java.util.List;
-
 import org.assertj.core.util.diff.Delta;
 
 @FunctionalInterface
